@@ -3,6 +3,26 @@
 #include <string.h>
 #include <time.h>
 
+// string functions
+
+void stripCharacters(char dest[], char string[]) {
+  int strippedIndex = 0;
+  for (int i = 0; i < strlen(string); i++) {
+    char cur = string[i];
+    switch (cur) {
+      case '\n':
+      case '\r':
+      case '\0':
+        break;
+      default:
+        dest[strippedIndex] = cur;
+        strippedIndex++;
+        break;
+    }
+  }
+  dest[strippedIndex] = '\0';
+}
+
 // Linked List and methods
 
 struct list {
@@ -42,7 +62,9 @@ void freeList(LIST *head) {
 // for debugging
 
 void printEntry(LIST *node) {
-  printf("%s\n", node->string);
+  char stripped[128];
+  stripCharacters(stripped, node->string);
+  printf("%s\n", stripped);
 }
 
 void printList(LIST *head) {
