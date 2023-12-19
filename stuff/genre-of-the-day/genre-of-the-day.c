@@ -4,6 +4,7 @@
 #include <time.h>
 
 // Linked List and methods
+
 struct list {
   char string[128];
   struct list *next;
@@ -39,6 +40,7 @@ void freeList(LIST *head) {
 }
 
 // for debugging
+
 void printEntry(LIST *node) {
   printf("%s\n", node->string);
 }
@@ -51,56 +53,50 @@ void printList(LIST *head) {
   }
 }
 
+// main script 
+
 int main(void) {
 
   // pointer to the list of genres file
   FILE *fptr;
+
+  // pointers to the head of the linked list we're going to construct, as well
+  // as the current node as we construct it
   LIST *current;
   LIST *head;
-  char line[128];
 
   current = NULL;
   head = NULL;
-  fptr = fopen("./genres.txt", "r");
 
+  // the string that will hold the line as we parse it
+  char line[128];
+
+  // open the file and construct the linked list from each line
+  fptr = fopen("./genres.txt", "r");
   while (fgets(line, sizeof(line), fptr)) {
-    // printf("allocate node\n");
     LIST *node = malloc(sizeof(LIST));
-    // printf("copy string\n");
 
     strcpy(node->string, line);
-    // printf("assign next\n");
     node->next = NULL;
 
     if (head == NULL) {
-      // printf("assign head\n");
       head = node;
       current = node;
     } else {
-      // printf("assign cur\n");
       current->next = node;
       current = node;
     }
   }
+  fclose(fptr);
 
-  // LIST *node = getItemAtIndex(0, head);
-  // printEntry(node);
-  // node = getItemAtIndex(1, head);
-  // printEntry(node);
-
+  // get a random item from the linked list
   srand(time(NULL));
   int index = rand() % getLength(head);
   LIST *node = getItemAtIndex(index, head);
   printEntry(node);
 
-  // printf("%i\n", index);
-  // printf()
-
-  // int length = getLength(head);
-
-  // printList(head);
+  // clean up the list when we're done (not sure if this is necessary)
   freeList(head);
-  fclose(fptr);
 
   return 0;
 }
